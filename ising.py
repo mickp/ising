@@ -15,25 +15,27 @@ class IsingRunner():
         def figupdate(*args):
             model.iterate()
             img.set_array(model.lattice)
-            return [img]
-
+            fig.canvas.set_window_title('T=%sK; count=%s' % (model.T, args[0]))
+            return img,
         model = Ising2d(**kwargs)
         self.model = model
         fig, ax = pyplot.subplots(1,1)
-        img = ax.imshow(self.model.lattice)
+        img = ax.imshow(model.lattice)
         img.set_interpolation('none')
         ani = animation.FuncAnimation(fig, figupdate, interval=50, blit=True)
+        ani.save_count = 0
         fig.show()
 
 
 class Ising2d(object):
-    def __init__(self, N=32, Jv=1e-20, Jh=1e-20, T=300, mu=0, dT=0):
+    def __init__(self, N=32, Jv=1e-20, Jh=1e-20, T=300, mu=0, dT=0, percyc=0):
         self.N = N
         self.Jv = Jv
         self.Jh = Jh
         self.T = T
         self.mu = mu
         self.dT = dT
+        self.percyc = percyc
 
         self.lattice = np.random.choice([-1,1], (N,N), int)
 
@@ -48,7 +50,7 @@ class Ising2d(object):
         coeffs = [.25 * self.Jv, .25 * self.Jh, .25 * self.Jv, .25 * self.Jh]
         mu = 0.5 * self.mu
 
-        n = N * N / 4
+        n = self.percyc or (N * N / 4)
         p = np.random.random_integers(0, N-1, n)
         q = np.random.random_integers(0, N-1, n)
         for i in range(n):
