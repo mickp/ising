@@ -20,28 +20,31 @@ class IsingRunner():
         self.model = model
         fig, ax = pyplot.subplots(1,1)
         img = ax.imshow(self.model.lattice)
-        ani = animation.FuncAnimation(fig, figupdate, interval=10, blit=True)
+        img.set_interpolation('none')
+        ani = animation.FuncAnimation(fig, figupdate, interval=50, blit=True)
         fig.show()
 
 
 class Ising2d(object):
-    def __init__(self, N=32, Jv=1e-20, Jh=1e-20, T=300, mu=0):
+    def __init__(self, N=32, Jv=1e-20, Jh=1e-20, T=300, mu=0, dT=0):
         self.N = N
         self.Jv = Jv
         self.Jh = Jh
         self.T = T
         self.mu = mu
+        self.dT = dT
 
         self.lattice = np.random.choice([-1,1], (N,N), int)
 
     def iterate(self):
+        self.T += min(self.dT, 1e-6)
         N = self.N
         lattice = self.lattice
         neighbours = [(-1, 0), (0, 1), (1, 0), (0, -1)]
         coeffs = [.25 * self.Jv, .25 * self.Jh, .25 * self.Jv, .25 * self.Jh]
         mu = 0.5 * self.mu
 
-        n = N
+        n = N * N / 4
         p = np.random.random_integers(0, N-1, n)
         q = np.random.random_integers(0, N-1, n)
         for i in range(n):
