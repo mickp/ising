@@ -2,6 +2,7 @@
 
 import numpy as np
 from matplotlib import pyplot, animation
+import zlib
 
 kB = 1.3806488e-23 # Joules / Kelvin
 
@@ -36,8 +37,11 @@ class Ising2d(object):
 
         self.lattice = np.random.choice([-1,1], (N,N), int)
 
+        self.histT = []
+        self.histS = []
+
     def iterate(self):
-        self.T += min(self.dT, 1e-6)
+        self.T = max(self.T + self.dT, 1e-6)
         N = self.N
         lattice = self.lattice
         neighbours = [(-1, 0), (0, 1), (1, 0), (0, -1)]
@@ -61,3 +65,6 @@ class Ising2d(object):
                 lattice[index] *= -1
             elif np.exp(- (newH - H) / (kB * self.T)) >= np.random.rand():
                 lattice[index] *= -1
+
+        self.histT.append(self.T)
+        self.histS.append(len(zlib.compress(lattice)))
