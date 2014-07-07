@@ -64,7 +64,7 @@ class Ising2d(object):
 
         for i in range(n):
             index = (p[i], q[i])
-            H = mu * lattice[index] \
+            H = mu * -lattice[index] \
                 + sum([-J * lattice[index]
                           * lattice[bound(shift(index, delta), N - 1)]
                           for delta, J in zip(neighbours, coeffs)])
