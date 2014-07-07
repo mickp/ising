@@ -56,11 +56,11 @@ class Ising2d(object):
 
         ## Evaluating np.exp(- (newH - H) / (kB * self.T)).
         # Use a hash, instead.
-        p_flip = {-8: np.exp(8 / (kB * self.T)),
-                  -4: np.exp(4 / (kB * self.T)),
-                   0: 1.0,
-                   4: np.exp(-4 / (kB * self.T)),
-                   8: np.exp(-8 / (kB * self.T))}
+        #p_flip = {-8: np.exp(8 / (kB * self.T)),
+        #          -4: np.exp(4 / (kB * self.T)),
+        #           0: 1.0,
+        #           4: np.exp(-4 / (kB * self.T)),
+        #           8: np.exp(-8 / (kB * self.T))}
 
         for i in range(n):
             index = (p[i], q[i])
@@ -74,8 +74,8 @@ class Ising2d(object):
                              for delta, J in zip(neighbours, coeffs)])
             if newH <= H:
                 lattice[index] *= -1
-            #elif np.exp(- (newH - H) / (kB * self.T)) >= np.random.rand():
-            elif p_flip[round(newH - H)] > np.random.rand():
+            elif np.exp(- (newH - H) / (kB * self.T)) >= np.random.rand():
+            #elif p_flip[round(newH - H)] > np.random.rand():
                 lattice[index] *= -1
 
         self.histT.append(self.T)
