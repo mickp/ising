@@ -75,7 +75,7 @@ class Ising2d(object):
             if newH <= H:
                 lattice[index] *= -1
             #elif np.exp(- (newH - H) / (kB * self.T)) >= np.random.rand():
-            elif p_flip[int(round(newH - H))] > np.random.rand():
+            elif p_flip[round(newH - H)] > np.random.rand():
                 lattice[index] *= -1
 
         self.histT.append(self.T)
