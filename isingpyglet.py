@@ -9,7 +9,7 @@ BLUE = 1<<23
 N=128
 global t, imsize
 t = 0
-model = ising.Ising2d(T=600,dT=-0.1,N=128)
+model = ising.Ising2d(T=600,dT=-0.1,N=N)
 
 window = pyglet.window.Window(resizable=True)
 label = pyglet.text.Label('stuff',
